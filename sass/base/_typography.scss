@@ -1,0 +1,7 @@
+@use "../utils/variables" as v;
+
+body {
+  font-family: v.$ff-body;
+  font-size: v.$fs-body-1;
+  font-weight: v.$fw-regular;
+}
