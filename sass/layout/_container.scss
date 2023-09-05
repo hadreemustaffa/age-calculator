@@ -1,0 +1,13 @@
+.container {
+  grid-column: 1 / 4;
+  gap: 1.125rem;
+
+  .container__input {
+    label {
+      margin-bottom: 1em;
+    }
+    input {
+      width: 100%;
+    }
+  }
+}

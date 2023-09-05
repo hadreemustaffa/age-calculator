@@ -4,4 +4,30 @@ body {
   font-family: v.$ff-body;
   font-size: v.$fs-body-1;
   font-weight: v.$fw-regular;
+  color: v.$clr-neutral-5;
+}
+
+h2 {
+  font-family: v.$ff-heading;
+  font-weight: v.$fw-extrabold;
+  font-style: italic;
+  font-size: v.$fs-heading;
+  line-height: 1.1;
+
+  & span {
+    color: v.$clr-primary-1;
+  }
+}
+
+label {
+  font-size: v.$fs-body-2;
+  font-weight: v.$fw-extrabold;
+  color: v.$clr-neutral-4;
+  letter-spacing: 3px;
+}
+
+input {
+  font-weight: v.$fw-bold;
+  border-radius: 0.5rem;
+  padding: 0.5rem 0.75em;
 }

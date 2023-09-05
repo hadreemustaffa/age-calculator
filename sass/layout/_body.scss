@@ -1,0 +1,9 @@
+@use "../utils/variables" as v;
+
+body {
+  min-height: 100vh;
+  display: grid;
+  place-content: center;
+  background-color: v.$clr-neutral-2;
+  overflow-y: scroll;
+}

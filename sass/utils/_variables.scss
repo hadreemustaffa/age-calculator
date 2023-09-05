@@ -1,9 +1,16 @@
-// fonts
-$ff-primary: "Poppins", sans-serif;
+@use "../base/font-face";
 
-$fs-lg: 3.75rem;
-$fs-md: 1.5rem;
-$fs-sm: 0.75rem;
+// fonts
+$ff-primary: "MyPoppins", sans-serif;
+
+$fs-lg: 2.75rem;
+$fs-md: 1rem;
+$fs-sm: 0.563rem;
+
+// desktop font-sizes
+// $fs-lg: 3.75rem;
+// $fs-md: 1.5rem;
+// $fs-sm: 0.75rem;
 
 $fw-extrabold: 800;
 $fw-bold: 700;
