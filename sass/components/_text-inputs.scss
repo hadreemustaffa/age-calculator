@@ -1,0 +1,12 @@
+@use "../utils/variables" as *;
+
+.container input {
+  border: 1px solid $clr-neutral-3;
+  border-radius: 0.5rem;
+  padding: 0.75em;
+
+  &:focus {
+    outline-offset: -1px;
+    outline: 2px solid $clr-neutral-4;
+  }
+}

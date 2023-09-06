@@ -1,16 +1,9 @@
-@use "../base/font-face";
-
 // fonts
 $ff-primary: "MyPoppins", sans-serif;
 
-$fs-lg: 2.75rem;
-$fs-md: 1rem;
-$fs-sm: 0.563rem;
-
-// desktop font-sizes
-// $fs-lg: 3.75rem;
-// $fs-md: 1.5rem;
-// $fs-sm: 0.75rem;
+$fs-lg: clamp(2.75rem, calc(1.98rem + 3.84vw), 5.44rem);
+$fs-md: clamp(1rem, calc(0.86rem + 0.71vw), 1.5rem);
+$fs-sm: clamp(0.56rem, calc(0.51rem + 0.27vw), 0.75rem);
 
 $fw-extrabold: 800;
 $fw-bold: 700;

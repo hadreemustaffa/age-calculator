@@ -14,28 +14,28 @@
 
 <body>
   <main>
-    <div class="container flex">
+    <form name="form" class="container flex" autocomplete="off">
       <div class="container__input flex column">
         <label for="day">DAY</label>
-        <input type="text" name="day" id="day" placeholder="DD" maxlength="2">
+        <input type="text" name="day" id="day" placeholder="DD" maxlength="2" required>
       </div>
       <div class="container__input flex column">
         <label for="month">MONTH</label>
-        <input type="text" name="month" id="month" placeholder="MM" maxlength="2">
+        <input type="text" name="month" id="month" placeholder="MM" maxlength="2" required>
       </div>
       <div class="container__input flex column">
         <label for="year">YEAR</label>
-        <input type="text" name="year" id="year" placeholder="YYYY" maxlength="4">
+        <input type="text" name="year" id="year" placeholder="YYYY" maxlength="4" required>
       </div>
-    </div>
-    <div class="arrow">
-      <div class="arrow__line"></div>
-      <img src="./assets/images/icon-arrow.svg" alt="">
+    </form>
+    <div class="separator">
+      <div class="separator__line"></div>
+      <input type="image" src="./assets/images/icon-arrow.svg" alt="Submit">
     </div>
     <div class="container flex column">
-      <h2><span>30</span> years</h2>
-      <h2><span>12</span> months</h2>
-      <h2><span>28</span> days</h2>
+      <h2><span>--</span> years</h2>
+      <h2><span>--</span> months</h2>
+      <h2><span>--</span> days</h2>
     </div>
   </main>
 

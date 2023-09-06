@@ -1,5 +1,7 @@
+@use "../utils/breakpoints" as *;
+
 .container {
-  grid-column: 1 / 4;
+  grid-column: 1 / 5;
   gap: 1.125rem;
 
   .container__input {
@@ -9,5 +11,11 @@
     input {
       width: 100%;
     }
+  }
+}
+
+@include md {
+  .container:first-child {
+    grid-column: 1 / 4;
   }
 }

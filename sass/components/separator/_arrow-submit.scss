@@ -1,0 +1,22 @@
+@use "../../utils/variables" as *;
+@use "../../utils/breakpoints" as *;
+
+.separator input {
+  width: 64px;
+  height: 64px;
+  background-color: $clr-primary-1;
+  padding: 1rem;
+  border-radius: 50%;
+  transition: 0.5s;
+
+  &:active {
+    transform: scale(0.95);
+  }
+}
+
+@include md {
+  .separator input {
+    width: 96px;
+    height: 96px;
+  }
+}

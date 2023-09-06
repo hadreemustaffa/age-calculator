@@ -1,9 +1,0 @@
-@use "../utils/variables" as v;
-
-input {
-  border: 1px solid v.$clr-neutral-3;
-
-  &:focus {
-    outline: 2px solid v.$clr-neutral-4;
-  }
-}
