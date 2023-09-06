@@ -7,10 +7,14 @@
   background-color: $clr-primary-1;
   padding: 1rem;
   border-radius: 50%;
-  transition: 0.5s;
+  border: transparent;
 
   &:active {
-    transform: scale(0.95);
+    background-color: $clr-neutral-5;
+  }
+  &:focus {
+    outline-offset: 2px;
+    outline: 2px solid $clr-neutral-5;
   }
 }
 

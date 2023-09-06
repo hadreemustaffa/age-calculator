@@ -2,8 +2,12 @@
 
 .container {
   grid-column: 1 / 5;
-  gap: 1.125rem;
+  grid-template-columns: repeat(3, 1fr);
 
+  .container__wrapper {
+    grid-column: 1 / 5;
+    column-gap: 1.125rem;
+  }
   .container__input {
     label {
       margin-bottom: 1em;
@@ -15,7 +19,12 @@
 }
 
 @include md {
-  .container:first-child {
-    grid-column: 1 / 4;
+  .container {
+    grid-template-columns: repeat(4, 1fr);
+
+    .container__wrapper {
+      grid-column: 1 / 4;
+    }
   }
 }
+// grid-template-columns: subgrid;
