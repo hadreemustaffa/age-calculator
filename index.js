@@ -1,5 +1,6 @@
 import dayjs from 'dayjs';
 import duration from 'dayjs/plugin/duration.js';
+import anime from 'animejs/lib/anime.es.js';
 
 dayjs().format();
 dayjs.extend(duration);
@@ -22,12 +23,20 @@ const calculateAge = (formSelector) => {
     const currentAge = dayjs.duration(today.diff(inputDate));
 
     for (let i = 0; i < outputs.length; i++) {
+      const animateNumber = (duration) => {
+        anime({
+          targets: outputs[i],
+          innerHTML: [0, duration],
+          round: 1,
+          easing: 'easeInOutExpo',
+        });
+      };
       if (i === 0) {
-        outputs[i].innerHTML = currentAge.$d.years;
+        animateNumber(currentAge.$d.years);
       } else if (i === 1) {
-        outputs[i].innerHTML = currentAge.$d.months;
+        animateNumber(currentAge.$d.months);
       } else {
-        outputs[i].innerHTML = currentAge.$d.days;
+        animateNumber(currentAge.$d.days);
       }
     }
   };
