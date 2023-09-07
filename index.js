@@ -19,9 +19,17 @@ const calculateAge = (formSelector) => {
       .set('month', inputMonth.value - 1)
       .set('year', inputYear.value);
 
-    const test = dayjs.duration(today.diff(inputDate));
+    const currentAge = dayjs.duration(today.diff(inputDate));
 
-    console.log(test);
+    for (let i = 0; i < outputs.length; i++) {
+      if (i === 0) {
+        outputs[i].innerHTML = currentAge.$d.years;
+      } else if (i === 1) {
+        outputs[i].innerHTML = currentAge.$d.months;
+      } else {
+        outputs[i].innerHTML = currentAge.$d.days;
+      }
+    }
   };
 
   formElements.setAttribute('novalidate', '');
