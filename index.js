@@ -1,6 +1,9 @@
 import dayjs from 'dayjs';
 import duration from 'dayjs/plugin/duration.js';
 import anime from 'animejs/lib/anime.es.js';
+import imgUrl from './public/icon-arrow.svg?inline';
+
+document.getElementById('submitBtn').src = imgUrl;
 
 dayjs().format();
 dayjs.extend(duration);
