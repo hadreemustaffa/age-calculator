@@ -29,3 +29,9 @@ label {
 input {
   font-weight: $fw-bold;
 }
+
+.error-message {
+  font-size: $fs-body-2;
+  font-style: italic;
+  color: $clr-primary-2;
+}

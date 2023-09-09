@@ -9,11 +9,9 @@
     column-gap: 1.125rem;
   }
   .container__input {
-    label {
-      margin-bottom: 1em;
-    }
     input {
       width: 100%;
+      margin: 0.5rem 0;
     }
   }
 }

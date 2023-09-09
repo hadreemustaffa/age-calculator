@@ -81,3 +81,14 @@
 .row-gap-1 {
   row-gap: 2rem;
 }
+
+.error {
+  color: $clr-primary-2;
+}
+.error-container {
+  border: 1px solid $clr-primary-2 !important;
+
+  &:focus {
+    outline: 2px solid $clr-primary-2 !important;
+  }
+}

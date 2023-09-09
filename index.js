@@ -1,7 +1,7 @@
 import dayjs from 'dayjs';
 import duration from 'dayjs/plugin/duration.js';
 import anime from 'animejs/lib/anime.es.js';
-import imgUrl from './public/icon-arrow.svg?inline';
+import imgUrl from '/icon-arrow.svg?inline';
 
 document.getElementById('submitBtn').src = imgUrl;
 
@@ -10,13 +10,24 @@ dayjs.extend(duration);
 
 const calculateAge = (formSelector) => {
   const formElements = document.querySelector(formSelector);
-  const inputs = document.querySelectorAll('input');
-  const inputDay = document.getElementById('day');
-  const inputMonth = document.getElementById('month');
-  const inputYear = document.getElementById('year');
-  const outputs = document.querySelectorAll('.output');
 
-  const calculate = () => {
+  const validationOptions = [
+    {
+      attribute: 'required',
+      isValid: (input) => input.value.trim() !== '',
+      errorMessage: () => `This field cannot be empty`,
+    },
+  ];
+
+  const validateSingleInput = (inputSelector) => {
+    const label = inputSelector.querySelector('label');
+    const input = inputSelector.querySelector('input');
+    const errorMsg = inputSelector.querySelector('.error-message');
+    const inputDay = document.getElementById('day');
+    const inputMonth = document.getElementById('month');
+    const inputYear = document.getElementById('year');
+    const outputs = document.querySelectorAll('.output');
+
     const today = dayjs();
     const inputDate = dayjs()
       .set('date', inputDay.value)
@@ -33,14 +44,6 @@ const calculateAge = (formSelector) => {
     // - The date is invalid e.g. 31/04/1991 (there are 30 days in April)
 
     for (let i = 0; i < outputs.length; i++) {
-      // const validationOptions = [
-      //   {
-      //     attribute: 'required',
-      //     isValid: (input) => input.value !== '',
-      //     errorMessage: () => 'This field cannot be empty',
-      //   },
-      // ];
-
       const animateNumber = (duration) => {
         anime({
           targets: outputs[i],
@@ -50,22 +53,55 @@ const calculateAge = (formSelector) => {
           duration: 1250,
         });
       };
-      if (i === 0) {
-        animateNumber(currentAge.$d.years);
-      } else if (i === 1) {
-        animateNumber(currentAge.$d.months);
-      } else {
-        animateNumber(currentAge.$d.days);
+
+      let errorState = false;
+      for (const option of validationOptions) {
+        if (input.hasAttribute(option.attribute) && !option.isValid(input)) {
+          errorMsg.textContent = option.errorMessage();
+          label.classList.add('error');
+          input.classList.add('error-container');
+          errorState = true;
+        }
+
+        if (!errorState) {
+          errorMsg.textContent = '';
+          label.classList.remove('error');
+          input.classList.remove('error-container');
+          errorState = false;
+        }
+        // if (i === 0) {
+        //   animateNumber(currentAge.$d.years);
+        // } else if (i === 1) {
+        //   animateNumber(currentAge.$d.months);
+        // } else {
+        //   animateNumber(currentAge.$d.days);
+        // }
       }
     }
   };
 
   formElements.setAttribute('novalidate', '');
 
+  Array.from(formElements.elements).forEach((element) => {
+    element.addEventListener('blur', (e) => {
+      validateSingleInput(e.target.closest('.container__input'));
+    });
+  });
+
   formElements.addEventListener('submit', (e) => {
     e.preventDefault();
-    calculate();
+    validateAllInputs(formElements);
   });
+
+  const validateAllInputs = (inputToValidate) => {
+    const inputs = Array.from(
+      inputToValidate.querySelectorAll('.container__input')
+    );
+
+    inputs.forEach((inputSelector) => {
+      validateSingleInput(inputSelector);
+    });
+  };
 };
 
 calculateAge('form');

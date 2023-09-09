@@ -14,19 +14,22 @@
 
 <body>
   <main>
-    <form name="form" class="container grid row-gap-1" autocomplete="on">
+    <form name="form" class="container grid row-gap-1" action="#">
       <div class="container__wrapper flex">
         <div class="container__input flex column">
           <label for="day">DAY</label>
           <input type="text" name="day" id="day" placeholder="DD" maxlength="2" required>
+          <div class="error-message"></div>
         </div>
         <div class="container__input flex column">
           <label for="month">MONTH</label>
           <input type="text" name="month" id="month" placeholder="MM" maxlength="2" required>
+          <div class="error-message"></div>
         </div>
         <div class="container__input flex column">
           <label for="year">YEAR</label>
           <input type="text" name="year" id="year" placeholder="YYYY" maxlength="4" required>
+          <div class="error-message"></div>
         </div>
       </div>
       <div class="separator">
