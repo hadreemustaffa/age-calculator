@@ -10,12 +10,57 @@ dayjs.extend(duration);
 
 const calculateAge = (formSelector) => {
   const formElements = document.querySelector(formSelector);
+  const inputDay = document.getElementById('day');
+  const inputMonth = document.getElementById('month');
+  const inputYear = document.getElementById('year');
+  const outputs = document.querySelectorAll('.output');
 
+  const setInputDate = () => {
+    const inputDate = dayjs()
+      .set('D', Number(inputDay.value))
+      .set('M', Number(inputMonth.value) - 1)
+      .set('y', Number(inputYear.value));
+    return inputDate;
+  };
+
+  const today = dayjs();
+  const currentAge = () => {
+    return dayjs.duration(today.diff(setInputDate()));
+  };
+
+  const animateNumber = (i, duration) => {
+    anime({
+      targets: outputs[i],
+      innerHTML: [0, duration],
+      round: 1,
+      easing: 'easeOutExpo',
+      duration: 1250,
+    });
+  };
+
+  // check user's input against the options below for validity
   const validationOptions = [
+    {
+      attribute: 'min',
+      isValid: (input) => input.value >= parseInt(input.min, 10),
+      errorMessage: () => 'Must be more than 0',
+    },
+    {
+      attribute: 'data-maxDay',
+      isValid: (input) =>
+        input.value <= parseInt(input.getAttribute('data-maxDay')),
+      errorMessage: () => 'Must be less than 32',
+    },
+    {
+      attribute: 'data-maxMonth',
+      isValid: (input) =>
+        input.value <= parseInt(input.getAttribute('data-maxMonth')),
+      errorMessage: () => 'Must be less than 13',
+    },
     {
       attribute: 'required',
       isValid: (input) => input.value.trim() !== '',
-      errorMessage: () => `This field cannot be empty`,
+      errorMessage: () => 'This field cannot be empty',
     },
   ];
 
@@ -23,59 +68,23 @@ const calculateAge = (formSelector) => {
     const label = inputSelector.querySelector('label');
     const input = inputSelector.querySelector('input');
     const errorMsg = inputSelector.querySelector('.error-message');
-    const inputDay = document.getElementById('day');
-    const inputMonth = document.getElementById('month');
-    const inputYear = document.getElementById('year');
-    const outputs = document.querySelectorAll('.output');
 
-    const today = dayjs();
-    const inputDate = dayjs()
-      .set('date', inputDay.value)
-      .set('month', inputMonth.value - 1)
-      .set('year', inputYear.value);
+    setInputDate();
+    currentAge();
 
-    const currentAge = dayjs.duration(today.diff(inputDate));
-    const isFuture = inputDate.isAfter(today);
+    let errorState = false;
+    for (const option of validationOptions) {
+      if (input.hasAttribute(option.attribute) && !option.isValid(input)) {
+        errorMsg.textContent = option.errorMessage();
+        label.classList.add('error');
+        input.classList.add('error-container');
+        errorState = true;
+      }
 
-    // - Any field is empty when the form is submitted**
-    // - The day number is not between 1-31
-    // - The month number is not between 1-12
-    // - The year is in the future
-    // - The date is invalid e.g. 31/04/1991 (there are 30 days in April)
-
-    for (let i = 0; i < outputs.length; i++) {
-      const animateNumber = (duration) => {
-        anime({
-          targets: outputs[i],
-          innerHTML: [0, duration],
-          round: 1,
-          easing: 'easeOutExpo',
-          duration: 1250,
-        });
-      };
-
-      let errorState = false;
-      for (const option of validationOptions) {
-        if (input.hasAttribute(option.attribute) && !option.isValid(input)) {
-          errorMsg.textContent = option.errorMessage();
-          label.classList.add('error');
-          input.classList.add('error-container');
-          errorState = true;
-        }
-
-        if (!errorState) {
-          errorMsg.textContent = '';
-          label.classList.remove('error');
-          input.classList.remove('error-container');
-          errorState = false;
-        }
-        // if (i === 0) {
-        //   animateNumber(currentAge.$d.years);
-        // } else if (i === 1) {
-        //   animateNumber(currentAge.$d.months);
-        // } else {
-        //   animateNumber(currentAge.$d.days);
-        // }
+      if (!errorState) {
+        errorMsg.textContent = '';
+        label.classList.remove('error');
+        input.classList.remove('error-container');
       }
     }
   };
@@ -101,6 +110,16 @@ const calculateAge = (formSelector) => {
     inputs.forEach((inputSelector) => {
       validateSingleInput(inputSelector);
     });
+
+    if (
+      !inputs[0].firstElementChild.classList.contains('error') &&
+      !inputs[1].firstElementChild.classList.contains('error') &&
+      !inputs[2].firstElementChild.classList.contains('error')
+    ) {
+      animateNumber(0, currentAge().$d.years);
+      animateNumber(1, currentAge().$d.months);
+      animateNumber(2, currentAge().$d.days);
+    }
   };
 };
 

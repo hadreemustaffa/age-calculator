@@ -30,6 +30,20 @@ input {
   font-weight: $fw-bold;
 }
 
+.separator {
+  input {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    &::before {
+      font-size: $fs-body-2;
+      font-weight: $fw-regular;
+      color: $clr-neutral-1;
+      letter-spacing: 1px;
+    }
+  }
+}
+
 .error-message {
   font-size: $fs-body-2;
   font-style: italic;
