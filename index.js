@@ -17,16 +17,31 @@ const calculateAge = (formSelector) => {
 
   const setInputDate = () => {
     const inputDate = dayjs()
-      .set('D', Number(inputDay.value))
-      .set('M', Number(inputMonth.value) - 1)
-      .set('y', Number(inputYear.value));
+      .set('D', inputDay.value)
+      .set('M', inputMonth.value - 1)
+      .set('y', inputYear.value);
     return inputDate;
   };
 
   const today = dayjs();
+
   const currentAge = () => {
-    return dayjs.duration(today.diff(setInputDate()));
+    const getDaysInMonth = () => {
+      const formattedInputDate = setInputDate().format('YYYY-MM-DD');
+      return dayjs(formattedInputDate).daysInMonth();
+    };
+
+    // 1. manually convert because dayjs duration with difference
+    // does not return desired output
+    let millisecondOutput = dayjs.duration(today.diff(setInputDate())).$ms;
+    let toYear = millisecondOutput / 31556926000; // number is total milliseconds in a year
+    let toMonth = (toYear % 1) * 12;
+    let toDay = (toMonth % 1) * getDaysInMonth();
+
+    return { day: toDay, month: toMonth, year: toYear };
   };
+
+  console.log(currentAge());
 
   const animateNumber = (i, duration) => {
     anime({
@@ -74,7 +89,9 @@ const calculateAge = (formSelector) => {
 
     let errorState = false;
     for (const option of validationOptions) {
+      // if the input selected has the attribute in validationOptions and is invalid
       if (input.hasAttribute(option.attribute) && !option.isValid(input)) {
+        // set error message to the message in validationOptions
         errorMsg.textContent = option.errorMessage();
         label.classList.add('error');
         input.classList.add('error-container');
@@ -89,19 +106,23 @@ const calculateAge = (formSelector) => {
     }
   };
 
+  // disable default browser validation
   formElements.setAttribute('novalidate', '');
 
+  // validate each input on blur event
   Array.from(formElements.elements).forEach((element) => {
     element.addEventListener('blur', (e) => {
       validateSingleInput(e.target.closest('.container__input'));
     });
   });
 
+  // validate all inputs on submit event
   formElements.addEventListener('submit', (e) => {
     e.preventDefault();
     validateAllInputs(formElements);
   });
 
+  // function to select which input group to validate
   const validateAllInputs = (inputToValidate) => {
     const inputs = Array.from(
       inputToValidate.querySelectorAll('.container__input')
@@ -111,14 +132,16 @@ const calculateAge = (formSelector) => {
       validateSingleInput(inputSelector);
     });
 
+    // if any of the input's label contains 'error' class,
+    // do not display output
     if (
       !inputs[0].firstElementChild.classList.contains('error') &&
       !inputs[1].firstElementChild.classList.contains('error') &&
       !inputs[2].firstElementChild.classList.contains('error')
     ) {
-      animateNumber(0, currentAge().$d.years);
-      animateNumber(1, currentAge().$d.months);
-      animateNumber(2, currentAge().$d.days);
+      animateNumber(0, Math.floor(currentAge().year));
+      animateNumber(1, Math.floor(currentAge().month));
+      animateNumber(2, Math.floor(currentAge().day));
     }
   };
 };
