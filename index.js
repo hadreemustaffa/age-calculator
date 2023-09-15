@@ -25,8 +25,6 @@ const calculateAge = (formSelector) => {
       .set('month', parseInt(inputMonth.value - 1))
       .set('date', parseInt(inputDay.value));
     const formatInputDate = inputDate.format('YYYY-MM-DD');
-
-    console.log(formatInputDate);
     return formatInputDate;
   };
 
@@ -67,20 +65,17 @@ const calculateAge = (formSelector) => {
       errorMessage: () => 'Must be in the past',
     },
     {
-      // sets a lower limit to both day and month
       attribute: 'min',
       isValid: (input) => input.value >= parseInt(input.min, 10),
       errorMessage: () => 'Cannot be zero',
     },
     {
-      // sets an upper limit to day
       attribute: 'data-maxDay',
       isValid: (input) =>
         input.value <= parseInt(input.getAttribute('data-maxDay')),
       errorMessage: () => 'Must be a valid day',
     },
     {
-      // sets a upper limit to month
       attribute: 'data-maxMonth',
       isValid: (input) =>
         input.value <= parseInt(input.getAttribute('data-maxMonth')),
@@ -135,7 +130,6 @@ const calculateAge = (formSelector) => {
   // disable default browser validation
   formElements.setAttribute('novalidate', '');
 
-  // validate all inputs on submit event
   formElements.addEventListener('submit', (e) => {
     e.preventDefault();
 
