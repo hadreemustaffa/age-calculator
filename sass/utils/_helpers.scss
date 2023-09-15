@@ -83,12 +83,13 @@
 }
 
 .error {
-  color: $clr-primary-2;
-}
-.error-container {
-  border: 1px solid $clr-primary-2 !important;
-
-  &:focus {
-    outline: 2px solid $clr-primary-2 !important;
+  label {
+    color: $clr-primary-2;
+  }
+  input {
+    border: 1px solid $clr-primary-2 !important;
+    &:focus {
+      outline: 2px solid $clr-primary-2 !important;
+    }
   }
 }

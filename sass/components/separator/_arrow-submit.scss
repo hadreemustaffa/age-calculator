@@ -9,6 +9,7 @@
   border-radius: 50%;
   border: transparent;
 
+  &:hover,
   &:active {
     background-color: $clr-neutral-5;
   }
