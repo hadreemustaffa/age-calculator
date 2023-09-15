@@ -54,11 +54,14 @@ footer {
   font-size: 0.813rem;
   font-weight: $fw-regular;
   a {
-    color: $clr-primary-1;
+    color: #3900b3;
     text-decoration: none;
-    opacity: 0.5;
     &:hover {
-      opacity: 1;
+      text-decoration: underline;
+    }
+    &:focus {
+      outline-offset: 1px;
+      outline: 2px solid $clr-neutral-5;
     }
   }
 }
