@@ -34,7 +34,7 @@ Users should be able to:
 
 ### Links
 
-- Solution URL: [Add solution URL here](https://your-solution-url.com)
+- Solution URL: [Frontend Mentor](https://www.frontendmentor.io/solutions/age-calculator-using-vite-dayjs-and-animejs-3PtUcAaZmC)
 - Live Site URL: [Github Pages](https://hadreemustaffa.github.io/age-calculator/)
 
 ## My process
@@ -60,7 +60,7 @@ This project took a lot longer than I expected since I was learning new things, 
 
 ### Continued development
 
-- Will be using Vite more in coming challenge that involves static sites.
+- Will be using Vite more in challenges that involves static sites.
 
 ### Useful resources
 
