@@ -1,5 +1,6 @@
 import dayjs from 'dayjs';
 import duration from 'dayjs/plugin/duration.js';
+import customParseFormat from 'dayjs/plugin/customParseFormat';
 import anime from 'animejs/lib/anime.es.js';
 import imgUrl from '/icon-arrow.svg?inline';
 
@@ -7,6 +8,7 @@ document.getElementById('submitBtn').src = imgUrl;
 
 dayjs().format();
 dayjs.extend(duration);
+dayjs.extend(customParseFormat);
 
 const calculateAge = (formSelector) => {
   const formElements = document.querySelector(formSelector);
@@ -15,24 +17,25 @@ const calculateAge = (formSelector) => {
   const inputYear = document.getElementById('year');
   const outputs = document.querySelectorAll('.output');
 
-  const setInputDate = () => {
-    const inputDate = dayjs()
-      .set('D', inputDay.value)
-      .set('M', inputMonth.value - 1)
-      .set('y', inputYear.value);
-    return inputDate;
-  };
-
   const today = dayjs();
 
-  const currentAge = () => {
-    const getDaysInMonth = () => {
-      const formattedInputDate = setInputDate().format('YYYY-MM-DD');
-      return dayjs(formattedInputDate).daysInMonth();
-    };
+  const setInputDate = () => {
+    const inputDate = dayjs()
+      .set('year', parseInt(inputYear.value))
+      .set('month', parseInt(inputMonth.value - 1))
+      .set('date', parseInt(inputDay.value));
+    const formatInputDate = inputDate.format('YYYY-MM-DD');
 
-    // 1. manually convert because dayjs duration with difference
-    // does not return desired output
+    console.log(formatInputDate);
+    return formatInputDate;
+  };
+
+  const getCurrentAge = () => {
+    const getDaysInMonth = () => {
+      return dayjs(setInputDate()).daysInMonth();
+    };
+    // manually convert because using dayjs duration with diff
+    // does not return correct number of days
     let millisecondOutput = dayjs.duration(today.diff(setInputDate())).$ms;
     let toYear = millisecondOutput / 31556926000; // number is total milliseconds in a year
     let toMonth = (toYear % 1) * 12;
@@ -40,8 +43,6 @@ const calculateAge = (formSelector) => {
 
     return { day: toDay, month: toMonth, year: toYear };
   };
-
-  console.log(currentAge());
 
   const animateNumber = (i, duration) => {
     anime({
@@ -56,22 +57,41 @@ const calculateAge = (formSelector) => {
   // check user's input against the options below for validity
   const validationOptions = [
     {
-      attribute: 'min',
-      isValid: (input) => input.value >= parseInt(input.min, 10),
-      errorMessage: () => 'Must be more than 0',
+      attribute: 'data-day',
+      isValid: (input) => dayjs(setInputDate()).date() == input.value,
+      errorMessage: () => 'Must be a valid date',
     },
     {
+      attribute: 'required',
+      isValid: () => dayjs().isAfter(dayjs(setInputDate())),
+      errorMessage: () => 'Must be in the past',
+    },
+    {
+      // sets a lower limit to both day and month
+      attribute: 'min',
+      isValid: (input) => input.value >= parseInt(input.min, 10),
+      errorMessage: () => 'Cannot be zero',
+    },
+    {
+      // sets an upper limit to day
       attribute: 'data-maxDay',
       isValid: (input) =>
         input.value <= parseInt(input.getAttribute('data-maxDay')),
-      errorMessage: () => 'Must be less than 32',
+      errorMessage: () => 'Must be a valid day',
     },
     {
+      // sets a upper limit to month
       attribute: 'data-maxMonth',
       isValid: (input) =>
         input.value <= parseInt(input.getAttribute('data-maxMonth')),
-      errorMessage: () => 'Must be less than 13',
+      errorMessage: () => 'Must be a valid month',
     },
+    {
+      attribute: 'required',
+      isValid: (input) => input.value.trim() !== '',
+      errorMessage: () => 'This field cannot be empty',
+    },
+
     {
       attribute: 'required',
       isValid: (input) => input.value.trim() !== '',
@@ -79,71 +99,48 @@ const calculateAge = (formSelector) => {
     },
   ];
 
-  const validateSingleInput = (inputSelector) => {
-    const label = inputSelector.querySelector('label');
-    const input = inputSelector.querySelector('input');
-    const errorMsg = inputSelector.querySelector('.error-message');
+  const validateAllInputs = (inputSelector) => {
+    const containers = document.querySelectorAll(inputSelector);
 
-    setInputDate();
-    currentAge();
+    Array.from(containers).forEach((container) => {
+      const input = container.querySelector('input');
+      const errorMsg = container.querySelector('.error-message');
 
-    let errorState = false;
-    for (const option of validationOptions) {
-      // if the input selected has the attribute in validationOptions and is invalid
-      if (input.hasAttribute(option.attribute) && !option.isValid(input)) {
-        // set error message to the message in validationOptions
-        errorMsg.textContent = option.errorMessage();
-        label.classList.add('error');
-        input.classList.add('error-container');
-        errorState = true;
+      let errorState = false;
+      for (const option of validationOptions) {
+        if (input.hasAttribute(option.attribute) && !option.isValid(input)) {
+          errorMsg.textContent = option.errorMessage();
+          container.classList.add('error');
+          errorState = true;
+        }
+
+        if (!errorState) {
+          errorMsg.textContent = '';
+          container.classList.remove('error');
+        }
       }
+    });
 
-      if (!errorState) {
-        errorMsg.textContent = '';
-        label.classList.remove('error');
-        input.classList.remove('error-container');
-      }
+    if (
+      !containers[0].classList.contains('error') &&
+      !containers[1].classList.contains('error') &&
+      !containers[2].classList.contains('error')
+    ) {
+      animateNumber(0, Math.floor(getCurrentAge().year));
+      animateNumber(1, Math.floor(getCurrentAge().month));
+      animateNumber(2, Math.floor(getCurrentAge().day));
     }
   };
 
   // disable default browser validation
   formElements.setAttribute('novalidate', '');
 
-  // validate each input on blur event
-  Array.from(formElements.elements).forEach((element) => {
-    element.addEventListener('blur', (e) => {
-      validateSingleInput(e.target.closest('.container__input'));
-    });
-  });
-
   // validate all inputs on submit event
   formElements.addEventListener('submit', (e) => {
     e.preventDefault();
-    validateAllInputs(formElements);
+
+    validateAllInputs('.container__input');
   });
-
-  // function to select which input group to validate
-  const validateAllInputs = (inputToValidate) => {
-    const inputs = Array.from(
-      inputToValidate.querySelectorAll('.container__input')
-    );
-
-    inputs.forEach((inputSelector) => {
-      validateSingleInput(inputSelector);
-    });
-
-    // if any of the input's label contains 'error' class,
-    // do not display output
-    if (
-      !inputs[0].firstElementChild.classList.contains('error') &&
-      !inputs[1].firstElementChild.classList.contains('error') &&
-      !inputs[2].firstElementChild.classList.contains('error')
-    ) {
-      animateNumber(0, Math.floor(currentAge().year));
-      animateNumber(1, Math.floor(currentAge().month));
-      animateNumber(2, Math.floor(currentAge().day));
-    }
-  };
 };
 
 calculateAge('form');
