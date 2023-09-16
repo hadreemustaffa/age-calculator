@@ -18,18 +18,19 @@
       <div class="container__wrapper flex">
         <div class="container__input flex column">
           <label for="day">DAY</label>
-          <input type="text" name="day" id="day" placeholder="DD" maxlength="2" min="1" data-day="" data-maxDay="31"
-            required>
+          <input type="text" name="day" id="day" placeholder="DD" maxlength="2" data-min="1" data-day=""
+            data-maxDay="31" required>
           <div class="error-message"></div>
         </div>
         <div class="container__input flex column">
           <label for="month">MONTH</label>
-          <input type="text" name="month" id="month" placeholder="MM" maxlength="2" min="1" data-maxMonth="12" required>
+          <input type="text" name="month" id="month" placeholder="MM" maxlength="2" data-min="1" data-maxMonth="12"
+            required>
           <div class="error-message"></div>
         </div>
         <div class="container__input flex column">
           <label for="year">YEAR</label>
-          <input type="text" name="year" id="year" placeholder="YYYY" minlength="4" min="1" maxlength="4" required>
+          <input type="text" name="year" id="year" placeholder="YYYY" minlength="4" data-min="1" maxlength="4" required>
           <div class="error-message"></div>
         </div>
       </div>
