@@ -34,9 +34,12 @@ const calculateAge = (formSelector) => {
     };
     // manually convert because using dayjs duration with diff
     // does not return correct number of days
-    let millisecondOutput = dayjs.duration(today.diff(setInputDate())).$ms;
-    let toYear = millisecondOutput / 31556926000; // number is total milliseconds in a year
-    let toMonth = (toYear % 1) * 12;
+    const MILLISECONDS_IN_A_YEAR = 31556926000;
+    const MONTHS_IN_A_YEAR = 12;
+
+    let millisecondsOutput = dayjs.duration(today.diff(setInputDate())).$ms;
+    let toYear = millisecondsOutput / MILLISECONDS_IN_A_YEAR;
+    let toMonth = (toYear % 1) * MONTHS_IN_A_YEAR;
     let toDay = (toMonth % 1) * getDaysInMonth();
 
     return { day: toDay, month: toMonth, year: toYear };
@@ -65,8 +68,9 @@ const calculateAge = (formSelector) => {
       errorMessage: () => 'Must be in the past',
     },
     {
-      attribute: 'min',
-      isValid: (input) => input.value >= parseInt(input.min, 10),
+      attribute: 'data-min',
+      isValid: (input) =>
+        input.value >= parseInt(input.getAttribute('data-min')),
       errorMessage: () => 'Cannot be zero',
     },
     {
